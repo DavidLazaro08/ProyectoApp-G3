@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="28dp"
+    android:background="#090012">
+
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/logo_desc"
+        android:src="@drawable/retrostore_logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Iniciar sesión"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accede a tu cuenta para entrar en Retro Store"
+        android:textColor="#A8A8B3"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="32dp" />
+
+    <EditText
+        android:id="@+id/etLogin"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:hint="@string/login"
+        android:inputType="text"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#8F8F9A"
+        android:backgroundTint="#7E22CE"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:autofillHints="username" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="28dp"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#8F8F9A"
+        android:backgroundTint="#7E22CE"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:autofillHints="password" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/inicio_sesion"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:backgroundTint="#A020F0" />
+
+</LinearLayout>
