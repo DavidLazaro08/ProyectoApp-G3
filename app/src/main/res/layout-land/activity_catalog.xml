@@ -8,55 +8,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="GAME LIBRARY"
             android:textColor="#F2E8FF"
-            android:textSize="28sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="6dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="All games"
             android:textColor="#B84DFF"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="14dp" />
 
+        <!-- NEON -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:background="#1A0830"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:id="@+id/imgNeonStreets"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_weight="1.1"
+                android:layout_marginEnd="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/neon_streets"
+                android:contentDescription="Neon Streets Redux" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="#1A0830"
-                android:padding="12dp"
-                android:layout_marginBottom="16dp">
-
-                <ImageView
-                    android:id="@+id/imgNeonStreets"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:layout_marginBottom="12dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/neon_streets"
-                    android:contentDescription="Neon Streets Redux" />
+                android:layout_weight="0.9"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="NEON STREETS REDUX"
                     android:textColor="#FFFFFF"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="6dp" />
 
@@ -65,8 +68,8 @@
                     android:layout_height="wrap_content"
                     android:text="Adventure · €19.99"
                     android:textColor="#B9A8C9"
-                    android:textSize="15sp"
-                    android:layout_marginBottom="12dp" />
+                    android:textSize="14sp"
+                    android:layout_marginBottom="10dp" />
 
                 <Button
                     android:id="@+id/btnAddGame1"
@@ -76,30 +79,39 @@
                     android:textColor="#090012"
                     android:backgroundTint="#A020F0" />
             </LinearLayout>
+        </LinearLayout>
+
+        <!-- SHADOW -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#1A0830"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:id="@+id/imgShadowBlade"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_weight="1.1"
+                android:layout_marginEnd="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/shadow_blade"
+                android:contentDescription="Shadow Blade DX" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="#1A0830"
-                android:padding="12dp"
-                android:layout_marginBottom="16dp">
-
-                <ImageView
-                    android:id="@+id/imgShadowBlade"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:layout_marginBottom="12dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/shadow_blade"
-                    android:contentDescription="Shadow Blade DX" />
+                android:layout_weight="0.9"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SHADOW BLADE DX"
                     android:textColor="#FFFFFF"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="6dp" />
 
@@ -108,8 +120,8 @@
                     android:layout_height="wrap_content"
                     android:text="Adventure · FREE"
                     android:textColor="#B9A8C9"
-                    android:textSize="15sp"
-                    android:layout_marginBottom="12dp" />
+                    android:textSize="14sp"
+                    android:layout_marginBottom="10dp" />
 
                 <Button
                     android:id="@+id/btnAddGame2"
@@ -119,30 +131,39 @@
                     android:textColor="#090012"
                     android:backgroundTint="#A020F0" />
             </LinearLayout>
+        </LinearLayout>
+
+        <!-- RETRO -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#1A0830"
+            android:padding="10dp"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:id="@+id/imgRetroStorm"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_weight="1.1"
+                android:layout_marginEnd="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/retro_storm"
+                android:contentDescription="Retro Storm" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="#1A0830"
-                android:padding="12dp"
-                android:layout_marginBottom="16dp">
-
-                <ImageView
-                    android:id="@+id/imgRetroStorm"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:layout_marginBottom="12dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/retro_storm"
-                    android:contentDescription="Retro Storm" />
+                android:layout_weight="0.9"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="RETRO STORM"
                     android:textColor="#FFFFFF"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="6dp" />
 
@@ -151,8 +172,8 @@
                     android:layout_height="wrap_content"
                     android:text="Fighting · €29.99"
                     android:textColor="#B9A8C9"
-                    android:textSize="15sp"
-                    android:layout_marginBottom="12dp" />
+                    android:textSize="14sp"
+                    android:layout_marginBottom="10dp" />
 
                 <Button
                     android:id="@+id/btnAddGame3"
@@ -162,17 +183,15 @@
                     android:textColor="#090012"
                     android:backgroundTint="#A020F0" />
             </LinearLayout>
-
-            <Button
-                android:id="@+id/btnGoCart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Ver carrito"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#7A1FD1" />
-
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnGoCart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver carrito"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#7A1FD1" />
 
     </LinearLayout>
 </ScrollView>
