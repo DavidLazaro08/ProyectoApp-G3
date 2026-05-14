@@ -71,5 +71,13 @@ class CartActivity : AppCompatActivity() {
         btnBackCatalog.setOnClickListener {
             finish()
         }
+        // Simula el checkout: vacía el carrito y muestra confirmación
+        val btnCheckout = findViewById<Button>(R.id.btnCheckout)
+        btnCheckout.setOnClickListener {
+            db.clearCart()
+            android.widget.Toast.makeText(this, "Compra simulada. Carrito vaciado.", android.widget.Toast.LENGTH_SHORT).show()
+            // Volvemos a la pantalla principal
+            finish()
+        }
     }
 }

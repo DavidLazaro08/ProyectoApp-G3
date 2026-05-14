@@ -131,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="PROCEED TO CHECKOUT"
-                android:textColor="#090012"
+                android:textColor="#FFFFFF"
                 android:backgroundTint="#A020F0"
                 android:layout_marginBottom="12dp" />
 
