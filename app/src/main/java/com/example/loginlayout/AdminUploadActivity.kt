@@ -29,11 +29,14 @@ class AdminUploadActivity : AppCompatActivity() {
         val btnPick = findViewById<Button>(R.id.btnPickImage)
         val btnSave = findViewById<Button>(R.id.btnSaveProduct)
 
-        // Abre selector de imágenes
+        // Abre selector de imágenes y pide permiso persistente
         btnPick.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = "image/*"
-            startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE)
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "image/*"
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+            }
+            startActivityForResult(intent, PICK_IMAGE)
         }
 
         // Guarda producto en la base de datos
@@ -68,8 +71,23 @@ class AdminUploadActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            selectedImageUri = data?.data
-            Toast.makeText(this, "Imagen seleccionada", Toast.LENGTH_SHORT).show()
+            val uri = data?.data
+            if (uri != null) {
+                selectedImageUri = uri
+                // Intenta tomar permiso persistente para mantener acceso
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (e: Exception) {
+                    // no crítico, pero lo registramos
+                    e.printStackTrace()
+                }
+                Toast.makeText(this, "Imagen seleccionada", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

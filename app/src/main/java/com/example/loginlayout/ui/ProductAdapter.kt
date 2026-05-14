@@ -40,7 +40,14 @@ class ProductAdapter(
         holder.price.text = "€${String.format("%.2f", p.price)}"
 
         if (!p.imagePath.isNullOrEmpty()) {
-            holder.img.setImageURI(Uri.parse(p.imagePath))
+            try {
+                holder.img.setImageURI(Uri.parse(p.imagePath))
+            } catch (e: SecurityException) {
+                // permiso denegado, usar recurso de fallback
+                holder.img.setImageResource(if (p.imageRes != 0) p.imageRes else R.drawable.ic_launcher_foreground)
+            } catch (e: Exception) {
+                holder.img.setImageResource(if (p.imageRes != 0) p.imageRes else R.drawable.ic_launcher_foreground)
+            }
         } else if (p.imageRes != 0) {
             holder.img.setImageResource(p.imageRes)
         } else {
