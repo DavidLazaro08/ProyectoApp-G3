@@ -1,3 +1,37 @@
+Proyecto: Retro Store - Implementación básica
+
+Resumen
+- App Android sencilla que simula una tienda de juegos offline.
+- Persistencia local con SQLite (tabla `products` y `cart`).
+- Panel de administrador local para añadir juegos (metadatos + imagen).
+
+Qué incluye
+- Catálogo cargado desde la base de datos local.
+- Detalle de producto, carrito persistente entre sesiones.
+- Login local simple: usar `admin` / `admin123` para ver el panel de administrador.
+
+Cómo ejecutar
+1. Abrir el proyecto en Android Studio o usar Gradle desde la línea de comandos.
+2. Compilar e instalar en emulador o dispositivo.
+
+Comandos (Windows):
+```bash
+gradlew.bat :app:assembleDebug
+gradlew.bat :app:installDebug
+```
+
+Limitaciones y decisiones (sencillas a propósito)
+- Se usó SQLiteOpenHelper en lugar de Room para mantener el código básico y fácil de entender.
+- Autenticación local mínima para el propósito del proyecto de grado (no segura para producción).
+- Las imágenes seleccionadas se referencian por URI; no hay subida de binarios ni servidor.
+
+Siguientes mejoras recomendadas
+- Migrar a Room para consultas y migraciones más limpias.
+- Integrar autenticación real (Firebase Auth) si se requiere seguridad.
+- Añadir edición/borrado de productos y control de usuarios.
+
+Contacto rápido
+- Proyecto preparado como base para trabajo de fin de grado; si quieres, hago la migración a Room o integro Firebase.
 # ProyectoApp-G3
 
 Aplicación Android desarrollada en Android Studio como adaptación del ecommerce realizado previamente en Laravel.

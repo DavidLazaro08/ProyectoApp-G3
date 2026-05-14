@@ -1,0 +1,75 @@
+package com.example.loginlayout
+
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.loginlayout.data.DBHelper
+import com.example.loginlayout.data.Product
+
+// Actividad simple para que el admin suba metadatos de juegos
+class AdminUploadActivity : AppCompatActivity() {
+
+    private val PICK_IMAGE = 1001
+    private var selectedImageUri: Uri? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_admin_upload)
+
+        val etTitle = findViewById<EditText>(R.id.etTitle)
+        val etCategory = findViewById<EditText>(R.id.etCategory)
+        val etPrice = findViewById<EditText>(R.id.etPrice)
+        val etDescription = findViewById<EditText>(R.id.etDescription)
+
+        val btnPick = findViewById<Button>(R.id.btnPickImage)
+        val btnSave = findViewById<Button>(R.id.btnSaveProduct)
+
+        // Abre selector de imágenes
+        btnPick.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "image/*"
+            startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE)
+        }
+
+        // Guarda producto en la base de datos
+        btnSave.setOnClickListener {
+            val title = etTitle.text.toString().trim()
+            val category = etCategory.text.toString().trim()
+            val price = etPrice.text.toString().toDoubleOrNull() ?: 0.0
+            val desc = etDescription.text.toString().trim()
+
+            if (title.isEmpty()) {
+                Toast.makeText(this, "Introduce un título", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val db = DBHelper(this)
+            val prod = Product(
+                title = title,
+                category = category,
+                description = desc,
+                price = price,
+                imageRes = 0,
+                imagePath = selectedImageUri?.toString(),
+                seller = "admin"
+            )
+            db.insertProduct(prod)
+            Toast.makeText(this, "Juego guardado", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+
+    // Recibe la imagen seleccionada
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            selectedImageUri = data?.data
+            Toast.makeText(this, "Imagen seleccionada", Toast.LENGTH_SHORT).show()
+        }
+    }
+}

@@ -24,6 +24,9 @@
             android:name=".CatalogActivity"
             android:exported="false" />
         <activity
+            android:name=".AdminUploadActivity"
+            android:exported="false" />
+        <activity
             android:name=".EcommerceActivity"
             android:exported="false" />
         <activity

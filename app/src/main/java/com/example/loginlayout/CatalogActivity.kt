@@ -2,97 +2,68 @@ package com.example.loginlayout
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.loginlayout.data.DBHelper
+import com.example.loginlayout.data.Product
+import com.example.loginlayout.ui.ProductAdapter
 
 class CatalogActivity : AppCompatActivity() {
+
+    // Activity que muestra productos desde la base local
+    private lateinit var db: DBHelper
+    private lateinit var adapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_catalog)
 
-        val btnAddGame1 = findViewById<Button>(R.id.btnAddGame1)
-        val btnAddGame2 = findViewById<Button>(R.id.btnAddGame2)
-        val btnAddGame3 = findViewById<Button>(R.id.btnAddGame3)
-        val btnGoCart = findViewById<Button>(R.id.btnGoCart)
+        db = DBHelper(this)
 
-        val imgNeon = findViewById<ImageView>(R.id.imgNeonStreets)
-        val imgShadow = findViewById<ImageView>(R.id.imgShadowBlade)
-        val imgRetro = findViewById<ImageView>(R.id.imgRetroStorm)
-
-        imgNeon.setOnClickListener {
-            abrirDetalle(
-                "NEON STREETS REDUX",
-                "Adventure · SNES",
-                "The definitive 16-bit synthwave odyssey with retro arcade vibes.",
-                19.99,
-                R.drawable.neon_streets
-            )
+        // Se insertan demos si la tabla está vacía
+        if (db.getAllProducts().isEmpty()) {
+            seedSampleProducts()
         }
 
-        imgShadow.setOnClickListener {
-            abrirDetalle(
-                "SHADOW BLADE DX",
-                "Adventure · FREE",
-                "A fast retro action game with dark pixel art and classic arcade combat.",
-                0.00,
-                R.drawable.shadow_blade
-            )
-        }
+        val recycler = findViewById<RecyclerView>(R.id.recyclerProducts)
+        recycler.layoutManager = LinearLayoutManager(this)
 
-        imgRetro.setOnClickListener {
-            abrirDetalle(
-                "RETRO STORM",
-                "Fighting · Arcade",
-                "A fighting game inspired by classic arcade machines and neon battles.",
-                29.99,
-                R.drawable.retro_storm
-            )
-        }
-
-        btnAddGame1.setOnClickListener {
-            abrirCarrito("NEON STREETS REDUX", 19.99)
-        }
-
-        btnAddGame2.setOnClickListener {
-            abrirCarrito("SHADOW BLADE DX", 0.00)
-        }
-
-        btnAddGame3.setOnClickListener {
-            abrirCarrito("RETRO STORM", 29.99)
-        }
-
-        btnGoCart.setOnClickListener {
-            val intent = Intent(this, CartActivity::class.java)
+        adapter = ProductAdapter(this, db.getAllProducts(), onAddToCart = { p ->
+            db.addToCart(p.id)
+            startActivity(Intent(this, CartActivity::class.java))
+        }, onOpenDetail = { p ->
+            val intent = Intent(this, ProductDetailActivity::class.java)
+            intent.putExtra("nombreJuego", p.title)
+            intent.putExtra("categoriaJuego", p.category)
+            intent.putExtra("descripcionJuego", p.description)
+            intent.putExtra("precioJuego", p.price)
+            intent.putExtra("imagenPath", p.imagePath)
+            intent.putExtra("imageRes", p.imageRes)
             startActivity(intent)
+        })
+
+        recycler.adapter = adapter
+
+        findViewById<android.widget.Button>(R.id.btnGoCart).setOnClickListener {
+            startActivity(Intent(this, CartActivity::class.java))
         }
     }
 
-    private fun abrirDetalle(
-        nombreJuego: String,
-        categoriaJuego: String,
-        descripcionJuego: String,
-        precioJuego: Double,
-        imagenJuego: Int
-    ) {
-        val intent = Intent(this, ProductDetailActivity::class.java)
-
-        intent.putExtra("nombreJuego", nombreJuego)
-        intent.putExtra("categoriaJuego", categoriaJuego)
-        intent.putExtra("descripcionJuego", descripcionJuego)
-        intent.putExtra("precioJuego", precioJuego)
-        intent.putExtra("imagenJuego", imagenJuego)
-
-        startActivity(intent)
+    // Inserta 3 juegos de ejemplo
+    private fun seedSampleProducts() {
+        val p1 = Product(title = "NEON STREETS REDUX", category = "Adventure · SNES", description = "The definitive 16-bit synthwave odyssey with retro arcade vibes.", price = 19.99, imageRes = R.drawable.neon_streets, seller = "retrodev")
+        val p2 = Product(title = "SHADOW BLADE DX", category = "Adventure · FREE", description = "A fast retro action game with dark pixel art and classic arcade combat.", price = 0.0, imageRes = R.drawable.shadow_blade, seller = "retrodev")
+        val p3 = Product(title = "RETRO STORM", category = "Fighting · Arcade", description = "A fighting game inspired by classic arcade machines and neon battles.", price = 29.99, imageRes = R.drawable.retro_storm, seller = "retrodev")
+        db.insertProduct(p1)
+        db.insertProduct(p2)
+        db.insertProduct(p3)
     }
 
-    private fun abrirCarrito(nombreJuego: String, precioJuego: Double) {
-        val intent = Intent(this, CartActivity::class.java)
-
-        intent.putExtra("nombreJuego", nombreJuego)
-        intent.putExtra("precioJuego", precioJuego)
-
-        startActivity(intent)
+    // Refresca la lista al volver a primer plano
+    override fun onResume() {
+        super.onResume()
+        val items = db.getAllProducts()
+        adapter.update(items)
     }
 }

@@ -17,6 +17,20 @@ class EcommerceActivity : AppCompatActivity() {
         val btnLibrary = findViewById<Button>(R.id.btnLibrary)
         val btnCart = findViewById<Button>(R.id.btnCart)
         val btnLogout = findViewById<Button>(R.id.btnLogout)
+        // admin button (added dynamically if user is admin)
+        var btnAdmin: Button? = null
+
+        val isAdmin = intent.getBooleanExtra("isAdmin", false)
+        // Si es admin añadimos un botón sencillo
+        if (isAdmin) {
+            btnAdmin = Button(this).apply {
+                text = "PANEL ADMIN"
+                setBackgroundColor(android.graphics.Color.parseColor("#A020F0"))
+                setTextColor(android.graphics.Color.WHITE)
+            }
+            val root = findViewById<android.widget.LinearLayout>(R.id.rootEcommerce)
+            root.addView(btnAdmin, root.childCount - 1)
+        }
 
         imgNeonHome.setOnClickListener {
             val intent = Intent(this, ProductDetailActivity::class.java)
@@ -45,6 +59,11 @@ class EcommerceActivity : AppCompatActivity() {
 
         btnLogout.setOnClickListener {
             finish()
+        }
+
+        btnAdmin?.setOnClickListener {
+            val i = Intent(this, AdminUploadActivity::class.java)
+            startActivity(i)
         }
     }
 }

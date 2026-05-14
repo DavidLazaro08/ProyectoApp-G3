@@ -22,24 +22,50 @@ class CartActivity : AppCompatActivity() {
         val btnBackCatalog = findViewById<Button>(R.id.btnBackCatalog)
         val imgCartProduct = findViewById<ImageView>(R.id.imgCartProduct)
 
-        val nombreJuego = intent.getStringExtra("nombreJuego") ?: "Aún no se ha añadido ningún producto"
-        val precioJuego = intent.getDoubleExtra("precioJuego", 0.0)
+        val db = com.example.loginlayout.data.DBHelper(this)
+        val cart = db.getCartItems()
 
-        val tax = precioJuego * 0.21
-        val total = precioJuego + tax
+        // Muestra resumen simple del carrito persistente
+        if (cart.isEmpty()) {
+            txtCartItems.text = "Carrito vacío"
+            txtCartPrice.text = "€0.00"
+            txtCartQuantity.text = "Cantidad: 0"
+            txtSummaryItems.text = "Items: 0"
+            txtSummarySubtotal.text = "Subtotal: €0.00"
+            txtSummaryTax.text = "Tax: €0.00"
+            txtTotal.text = "TOTAL: €0.00"
+        } else {
+            var subtotal = 0.0
+            var itemsCount = 0
+            // Mostrar primer producto como ejemplo
+            val first = cart[0]
+            val product = db.getProductById(first.first)
+            if (product != null) {
+                txtCartItems.text = product.title
+                txtCartPrice.text = String.format("€%.2f", product.price)
+                txtCartQuantity.text = "Cantidad: ${first.second}"
+                if (!product.imagePath.isNullOrEmpty()) {
+                    imgCartProduct.setImageURI(android.net.Uri.parse(product.imagePath))
+                } else if (product.imageRes != 0) {
+                    imgCartProduct.setImageResource(product.imageRes)
+                }
+            }
 
-        txtCartItems.text = nombreJuego
-        txtCartPrice.text = String.format("€%.2f", precioJuego)
-        txtCartQuantity.text = "Cantidad: 1"
-        txtSummaryItems.text = "Items: 1"
-        txtSummarySubtotal.text = String.format("Subtotal: €%.2f", precioJuego)
-        txtSummaryTax.text = String.format("Tax: €%.2f", tax)
-        txtTotal.text = String.format("TOTAL: €%.2f", total)
+            for (entry in cart) {
+                val prod = db.getProductById(entry.first)
+                if (prod != null) {
+                    subtotal += prod.price * entry.second
+                    itemsCount += entry.second
+                }
+            }
 
-        when (nombreJuego) {
-            "NEON STREETS REDUX" -> imgCartProduct.setImageResource(R.drawable.neon_streets)
-            "SHADOW BLADE DX" -> imgCartProduct.setImageResource(R.drawable.shadow_blade)
-            "RETRO STORM" -> imgCartProduct.setImageResource(R.drawable.retro_storm)
+            val tax = subtotal * 0.21
+            val total = subtotal + tax
+
+            txtSummaryItems.text = "Items: $itemsCount"
+            txtSummarySubtotal.text = String.format("Subtotal: €%.2f", subtotal)
+            txtSummaryTax.text = String.format("Tax: €%.2f", tax)
+            txtTotal.text = String.format("TOTAL: €%.2f", total)
         }
 
         btnBackCatalog.setOnClickListener {

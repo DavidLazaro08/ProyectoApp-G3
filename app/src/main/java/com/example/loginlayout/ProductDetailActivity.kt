@@ -26,9 +26,15 @@ class ProductDetailActivity : AppCompatActivity() {
         val descripcionJuego = intent.getStringExtra("descripcionJuego")
             ?: "The definitive 16-bit synthwave odyssey with retro arcade vibes."
         val precioJuego = intent.getDoubleExtra("precioJuego", 19.99)
-        val imagenJuego = intent.getIntExtra("imagenJuego", R.drawable.neon_streets)
+        val imagenPath = intent.getStringExtra("imagenPath")
+        val imagenRes = intent.getIntExtra("imageRes", intent.getIntExtra("imagenJuego", R.drawable.neon_streets))
 
-        imgProducto.setImageResource(imagenJuego)
+        // Muestra imagen desde uri o recurso según esté disponible
+        if (!imagenPath.isNullOrEmpty()) {
+            imgProducto.setImageURI(android.net.Uri.parse(imagenPath))
+        } else {
+            imgProducto.setImageResource(imagenRes)
+        }
         txtTitulo.text = nombreJuego
         txtCategoria.text = categoriaJuego
         txtDescripcion.text = descripcionJuego
