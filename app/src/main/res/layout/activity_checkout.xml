@@ -147,19 +147,90 @@
             android:letterSpacing="0.1"
             android:layout_marginBottom="12dp" />
 
-        <EditText
-            android:id="@+id/etCardNumber"
+        <!-- Tarjeta visual en tiempo real -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/card_bg"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="14dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/previewCardNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="•••• •••• •••• ••••"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:fontFamily="monospace" />
+                <TextView
+                    android:id="@+id/previewCardType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/previewCardName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TITULAR"
+                    android:textColor="#BBBBBB"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/previewCardExpiry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MM/AA"
+                    android:textColor="#BBBBBB"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Número de tarjeta con badge de tipo -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:hint="Número de tarjeta"
-            android:textColorHint="@color/steam_text_secondary"
-            android:textColor="@color/steam_text_primary"
             android:background="@drawable/input_bg"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:inputType="number"
-            android:maxLines="1"
-            android:layout_marginBottom="10dp" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <EditText
+                android:id="@+id/etCardNumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="Número de tarjeta"
+                android:textColorHint="@color/steam_text_secondary"
+                android:textColor="@color/steam_text_primary"
+                android:background="@null"
+                android:paddingStart="12dp"
+                android:paddingEnd="4dp"
+                android:inputType="phone"
+                android:maxLength="19"
+                android:maxLines="1" />
+            <TextView
+                android:id="@+id/txtCardType"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingEnd="12dp"
+                android:textColor="@color/steam_blue"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/etCardName"
@@ -191,7 +262,8 @@
                 android:background="@drawable/input_bg"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                android:inputType="number"
+                android:inputType="phone"
+                android:maxLength="5"
                 android:maxLines="1" />
             <View android:layout_width="8dp" android:layout_height="1dp" />
             <EditText
@@ -205,7 +277,8 @@
                 android:background="@drawable/input_bg"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                android:inputType="number"
+                android:inputType="numberPassword"
+                android:maxLength="4"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -219,6 +292,14 @@
             android:layout_marginBottom="8dp" />
 
         <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+
+        <ProgressBar
+            android:id="@+id/progressPay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp" />
 
         <Button
             android:id="@+id/btnConfirmPurchase"
