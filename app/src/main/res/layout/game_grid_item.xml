@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#16202d"
+    android:background="@color/steam_card"
     android:layout_margin="4dp">
 
     <ImageView
@@ -23,7 +23,7 @@
             android:id="@+id/gridItemTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#c6d4df"
+            android:textColor="@color/steam_text_primary"
             android:textSize="12sp"
             android:textStyle="bold"
             android:maxLines="2"
@@ -33,7 +33,7 @@
             android:id="@+id/gridItemCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#8f98a0"
+            android:textColor="@color/steam_text_secondary"
             android:textSize="10sp"
             android:layout_marginTop="2dp"
             android:maxLines="1"
@@ -43,7 +43,7 @@
             android:id="@+id/gridItemPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#a4d007"
+            android:textColor="@color/steam_blue"
             android:textSize="12sp"
             android:textStyle="bold"
             android:layout_marginTop="4dp" />

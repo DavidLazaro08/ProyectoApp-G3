@@ -1,9 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Tema base de la aplicación. Usamos pantalla completa sin ActionBar propia del sistema. -->
     <style name="Base.Theme.Loginlayout" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/steam_bg_dark</item>
+        <item name="android:statusBarColor">@color/steam_bg_dark</item>
     </style>
 
     <style name="Theme.Loginlayout" parent="Base.Theme.Loginlayout" />
+
 </resources>

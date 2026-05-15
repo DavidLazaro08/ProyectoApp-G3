@@ -2,7 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <!-- Paleta Retro Purple -->
+
+    <!-- Paleta principal de Retro Store -->
     <color name="steam_bg">#0B0014</color>
     <color name="steam_bg_dark">#080010</color>
     <color name="steam_surface">#1A0830</color>

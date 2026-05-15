@@ -12,13 +12,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.loginlayout.R
 import com.example.loginlayout.data.Product
 
+/*
+ * Adapter para la sección de ofertas.
+ * Muestra productos con descuento en una lista horizontal.
+ */
 class OfferAdapter(
     private val context: Context,
     private var items: List<Product>,
     private val onClick: (Product) -> Unit
-) : RecyclerView.Adapter<OfferAdapter.VH>() {
+) : RecyclerView.Adapter<OfferAdapter.OfferViewHolder>() {
 
-    inner class VH(view: View) : RecyclerView.ViewHolder(view) {
+    inner class OfferViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val img: ImageView = view.findViewById(R.id.offerImg)
         val title: TextView = view.findViewById(R.id.offerTitle)
         val discount: TextView = view.findViewById(R.id.offerDiscount)
@@ -26,39 +30,57 @@ class OfferAdapter(
         val priceOld: TextView = view.findViewById(R.id.offerPriceOld)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.offer_item, parent, false)
-        return VH(v)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.offer_item, parent, false)
+
+        return OfferViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: VH, position: Int) {
-        val p = items[position]
-        holder.title.text = p.title
-        holder.discount.text = "-${p.discount}%"
-        val discounted = p.price * (1 - p.discount / 100.0)
-        holder.priceNew.text = "€%.2f".format(discounted)
-        holder.priceOld.text = "€%.2f".format(p.price)
+    override fun onBindViewHolder(holder: OfferViewHolder, position: Int) {
+        val product = items[position]
+
+        holder.title.text = product.title
+        holder.discount.text = "-${product.discount}%"
+
+        val discountedPrice = product.price * (1 - product.discount / 100.0)
+
+        holder.priceNew.text = "€%.2f".format(discountedPrice)
+        holder.priceOld.text = "€%.2f".format(product.price)
         holder.priceOld.paintFlags = holder.priceOld.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
 
+        // Primero intentamos cargar imagen externa. Si falla, usamos la imagen local.
         when {
-            !p.imagePath.isNullOrEmpty() -> {
-                try { holder.img.setImageURI(Uri.parse(p.imagePath)) }
-                catch (e: Exception) { setFallbackImage(holder.img, p) }
+            !product.imagePath.isNullOrEmpty() -> {
+                try {
+                    holder.img.setImageURI(Uri.parse(product.imagePath))
+                } catch (e: Exception) {
+                    setFallbackImage(holder.img, product)
+                }
             }
-            p.imageRes != 0 -> holder.img.setImageResource(p.imageRes)
+
+            product.imageRes != 0 -> {
+                holder.img.setImageResource(product.imageRes)
+            }
         }
 
-        holder.itemView.setOnClickListener { onClick(p) }
+        holder.itemView.setOnClickListener {
+            onClick(product)
+        }
     }
 
-    private fun setFallbackImage(img: ImageView, p: Product) {
-        if (p.imageRes != 0) img.setImageResource(p.imageRes)
+    override fun getItemCount(): Int {
+        return items.size
     }
-
-    override fun getItemCount(): Int = items.size
 
     fun update(newItems: List<Product>) {
         items = newItems
         notifyDataSetChanged()
+    }
+
+    private fun setFallbackImage(img: ImageView, product: Product) {
+        if (product.imageRes != 0) {
+            img.setImageResource(product.imageRes)
+        }
     }
 }
