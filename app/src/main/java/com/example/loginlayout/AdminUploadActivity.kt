@@ -12,10 +12,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.loginlayout.data.DBHelper
 import com.example.loginlayout.data.Product
 
-// Subida de juegos por el administrador
+/*
+ * Pantalla de administración para añadir nuevos juegos al catálogo.
+ * Permite introducir los datos básicos del producto y seleccionar una imagen del dispositivo.
+ */
 class AdminUploadActivity : AppCompatActivity() {
 
-    private val PICK_IMAGE = 1001
+    private val PICK_IMAGE_REQUEST = 1001
+
     private var selectedImageUri: Uri? = null
     private lateinit var imgPreview: ImageView
 
@@ -27,27 +31,30 @@ class AdminUploadActivity : AppCompatActivity() {
         val etCategory = findViewById<EditText>(R.id.etCategory)
         val etPrice = findViewById<EditText>(R.id.etPrice)
         val etDescription = findViewById<EditText>(R.id.etDescription)
+
         imgPreview = findViewById(R.id.imgPreview)
 
         val btnPick = findViewById<Button>(R.id.btnPickImage)
         val btnSave = findViewById<Button>(R.id.btnSaveProduct)
 
-        // Abre el selector de imágenes
+        // Selección de imagen desde el dispositivo.
         btnPick.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "image/*"
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                        Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
             }
-            startActivityForResult(intent, PICK_IMAGE)
+
+            startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
 
-        // Guarda el juego en la BD
+        // Guarda el producto en la base de datos local.
         btnSave.setOnClickListener {
             val title = etTitle.text.toString().trim()
             val category = etCategory.text.toString().trim()
             val price = etPrice.text.toString().toDoubleOrNull() ?: 0.0
-            val desc = etDescription.text.toString().trim()
+            val description = etDescription.text.toString().trim()
 
             if (title.isEmpty()) {
                 Toast.makeText(this, "Introduce un título", Toast.LENGTH_SHORT).show()
@@ -55,40 +62,49 @@ class AdminUploadActivity : AppCompatActivity() {
             }
 
             val db = DBHelper(this)
-            val prod = Product(
+
+            val product = Product(
                 title = title,
                 category = category,
-                description = desc,
+                description = description,
                 price = price,
                 imageRes = 0,
                 imagePath = selectedImageUri?.toString(),
                 seller = "admin"
             )
-            db.insertProduct(prod)
+
+            db.insertProduct(product)
+
             Toast.makeText(this, "Juego guardado", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
 
-    // Recibe la imagen seleccionada
+    // Recibe la imagen elegida y la muestra como vista previa.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
             val uri = data?.data
+
             if (uri != null) {
                 selectedImageUri = uri
+
                 try {
                     imgPreview.setImageURI(uri)
-                } catch (e: Exception) { /* keep placeholder */ }
-                // Guarda permiso de lectura de la imagen
+                } catch (e: Exception) {
+                    Toast.makeText(this, "No se pudo cargar la vista previa", Toast.LENGTH_SHORT).show()
+                }
+
                 try {
                     contentResolver.takePersistableUriPermission(
                         uri,
                         Intent.FLAG_GRANT_READ_URI_PERMISSION
                     )
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    // Si no se puede conservar el permiso, la imagen puede no mantenerse tras reiniciar.
                 }
+
                 Toast.makeText(this, "Imagen seleccionada", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()

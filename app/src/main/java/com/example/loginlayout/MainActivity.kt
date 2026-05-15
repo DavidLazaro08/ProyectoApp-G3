@@ -9,6 +9,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loginlayout.data.DBHelper
 
+/*
+ * Pantalla inicial de la aplicación.
+ * Comprueba el login del usuario y lo envía al flujo principal si los datos son correctos.
+ */
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,9 +23,11 @@ class MainActivity : AppCompatActivity() {
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
         val txtError = findViewById<TextView>(R.id.txtLoginError)
+        val txtGoRegister = findViewById<TextView>(R.id.txtGoRegister)
 
         val db = DBHelper(this)
 
+        // Validamos los datos introducidos en el formulario de acceso.
         btnLogin.setOnClickListener {
             val username = etLogin.text.toString().trim()
             val password = etPassword.text.toString()
@@ -36,18 +42,21 @@ class MainActivity : AppCompatActivity() {
 
             if (isValid) {
                 txtError.visibility = View.GONE
-                startActivity(Intent(this, SteamGuardActivity::class.java).apply {
-                    putExtra("isAdmin", isAdmin)
-                    putExtra("username", username)
-                })
+
+                val intent = Intent(this, SteamGuardActivity::class.java)
+                intent.putExtra("isAdmin", isAdmin)
+                intent.putExtra("username", username)
+
+                startActivity(intent)
             } else {
                 txtError.visibility = View.VISIBLE
                 txtError.text = "Usuario o contraseña incorrectos"
                 etPassword.text.clear()
             }
         }
-        val txtGoRegister = findViewById<TextView?>(R.id.txtGoRegister)
-        txtGoRegister?.setOnClickListener {
+
+        // Acceso a la pantalla de registro.
+        txtGoRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }

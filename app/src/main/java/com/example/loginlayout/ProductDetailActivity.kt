@@ -1,6 +1,7 @@
 ﻿package com.example.loginlayout
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -8,6 +9,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loginlayout.data.DBHelper
 
+/*
+ * Pantalla de detalle del producto.
+ * Recibe los datos del juego seleccionado y permite añadirlo al carrito.
+ */
 class ProductDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,13 +34,17 @@ class ProductDetailActivity : AppCompatActivity() {
             ?: "The definitive 16-bit synthwave odyssey with retro arcade vibes."
         val precioJuego = intent.getDoubleExtra("precioJuego", 19.99)
         val imagenPath = intent.getStringExtra("imagenPath")
-        val imagenRes = intent.getIntExtra("imageRes", intent.getIntExtra("imagenJuego", R.drawable.neon_streets))
+        val imagenRes = intent.getIntExtra(
+            "imageRes",
+            intent.getIntExtra("imagenJuego", R.drawable.neon_streets)
+        )
         val isAdmin = intent.getBooleanExtra("isAdmin", false)
         val username = intent.getStringExtra("username") ?: ""
 
+        // Si el producto viene con imagen externa, intentamos cargarla. Si falla, usamos imagen local.
         if (!imagenPath.isNullOrEmpty()) {
             try {
-                imgProducto.setImageURI(android.net.Uri.parse(imagenPath))
+                imgProducto.setImageURI(Uri.parse(imagenPath))
             } catch (e: Exception) {
                 imgProducto.setImageResource(if (imagenRes != 0) imagenRes else R.drawable.neon_streets)
             }
@@ -46,23 +55,33 @@ class ProductDetailActivity : AppCompatActivity() {
         txtTitulo.text = nombreJuego
         txtCategoria.text = categoriaJuego
         txtDescripcion.text = descripcionJuego
-        txtPrecio.text = if (precioJuego == 0.0) "GRATIS" else String.format("€%.2f", precioJuego)
+        txtPrecio.text = if (precioJuego == 0.0) {
+            "GRATIS"
+        } else {
+            "€%.2f".format(precioJuego)
+        }
 
         btnComprar.setOnClickListener {
             val db = DBHelper(this)
+
             if (productId != -1) {
                 db.addToCart(productId)
             } else {
-                // Fallback: busca por título si no tenemos id
+                // Recurso de seguridad por si llegamos al detalle sin id de producto.
                 val found = db.getAllProducts().find { it.title == nombreJuego }
-                if (found != null) db.addToCart(found.id)
+                if (found != null) {
+                    db.addToCart(found.id)
+                }
             }
+
             startActivity(Intent(this, CartActivity::class.java).apply {
                 putExtra("isAdmin", isAdmin)
                 putExtra("username", username)
             })
         }
 
-        btnVolver.setOnClickListener { finish() }
+        btnVolver.setOnClickListener {
+            finish()
+        }
     }
 }

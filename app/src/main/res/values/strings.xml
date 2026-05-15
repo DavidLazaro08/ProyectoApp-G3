@@ -2,6 +2,6 @@
     <string name="app_name">Retro Store</string>
     <string name="login">Nombre de usuario</string>
     <string name="password">Contraseña</string>
-    <string name="inicio_sesion">INICIAR SESION</string>
+    <string name="inicio_sesion">INICIAR SESIÓN</string>
     <string name="logo_desc">Logo de la aplicación</string>
 </resources>

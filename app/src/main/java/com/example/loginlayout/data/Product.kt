@@ -1,16 +1,18 @@
-
 package com.example.loginlayout.data
 
-// Modelo simple para un producto
+/*
+ * Modelo de datos para los productos de Retro Store.
+ * Se usa tanto para los juegos cargados inicialmente como para los añadidos desde administración.
+ */
 data class Product(
     var id: Int = 0,
     var title: String,
     var category: String,
     var description: String,
     var price: Double,
-    var discount: Int = 0,       // % de descuento
-    var imageRes: Int = 0,       // drawable de recurso
-    var imagePath: String? = null, // ruta de imagen del usuario
+    var discount: Int = 0,
+    var imageRes: Int = 0,
+    var imagePath: String? = null,
     var seller: String? = null,
     var createdAt: Long = System.currentTimeMillis()
 )
