@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_store"
-        android:icon="@drawable/ic_nav_store"
-        android:title="Tienda" />
-    <item
-        android:id="@+id/nav_library"
-        android:icon="@drawable/ic_nav_library"
-        android:title="Biblioteca" />
-    <item
-        android:id="@+id/nav_cart"
-        android:icon="@drawable/ic_nav_cart"
-        android:title="Carrito" />
+    <item android:id="@+id/nav_home" android:icon="@drawable/ic_nav_home" android:title="Inicio" />
+    <item android:id="@+id/nav_store" android:icon="@drawable/ic_nav_store" android:title="Tienda" />
+    <item android:id="@+id/nav_library" android:icon="@drawable/ic_nav_library" android:title="Biblioteca" />
+    <item android:id="@+id/nav_cart" android:icon="@drawable/ic_nav_cart" android:title="Carrito" />
+    <item android:id="@+id/nav_profile" android:icon="@drawable/ic_nav_profile" android:title="Perfil" />
 </menu>

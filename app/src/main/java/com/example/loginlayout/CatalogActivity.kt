@@ -80,6 +80,12 @@ class CatalogActivity : AppCompatActivity() {
         bottomNav.selectedItemId = R.id.nav_library
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, HomeActivity::class.java).apply {
+                        putExtra("isAdmin", isAdmin); putExtra("username", username)
+                    })
+                    true
+                }
                 R.id.nav_store -> {
                     startActivity(Intent(this, EcommerceActivity::class.java).apply {
                         putExtra("isAdmin", isAdmin)
@@ -92,6 +98,12 @@ class CatalogActivity : AppCompatActivity() {
                     startActivity(Intent(this, CartActivity::class.java).apply {
                         putExtra("isAdmin", isAdmin)
                         putExtra("username", username)
+                    })
+                    true
+                }
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, ProfileActivity::class.java).apply {
+                        putExtra("isAdmin", isAdmin); putExtra("username", username)
                     })
                     true
                 }

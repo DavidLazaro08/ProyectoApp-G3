@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.loginlayout.data.DBHelper
 import com.example.loginlayout.data.Product
 
-// Actividad simple para que el admin suba metadatos de juegos
+// Subida de juegos por el administrador
 class AdminUploadActivity : AppCompatActivity() {
 
     private val PICK_IMAGE = 1001
@@ -32,7 +32,7 @@ class AdminUploadActivity : AppCompatActivity() {
         val btnPick = findViewById<Button>(R.id.btnPickImage)
         val btnSave = findViewById<Button>(R.id.btnSaveProduct)
 
-        // Abre selector de imágenes y pide permiso persistente
+        // Abre el selector de imágenes
         btnPick.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
@@ -42,7 +42,7 @@ class AdminUploadActivity : AppCompatActivity() {
             startActivityForResult(intent, PICK_IMAGE)
         }
 
-        // Guarda producto en la base de datos
+        // Guarda el juego en la BD
         btnSave.setOnClickListener {
             val title = etTitle.text.toString().trim()
             val category = etCategory.text.toString().trim()
@@ -80,14 +80,13 @@ class AdminUploadActivity : AppCompatActivity() {
                 try {
                     imgPreview.setImageURI(uri)
                 } catch (e: Exception) { /* keep placeholder */ }
-                // Intenta tomar permiso persistente para mantener acceso
+                // Guarda permiso de lectura de la imagen
                 try {
                     contentResolver.takePersistableUriPermission(
                         uri,
                         Intent.FLAG_GRANT_READ_URI_PERMISSION
                     )
                 } catch (e: Exception) {
-                    // no crítico, pero lo registramos
                     e.printStackTrace()
                 }
                 Toast.makeText(this, "Imagen seleccionada", Toast.LENGTH_SHORT).show()

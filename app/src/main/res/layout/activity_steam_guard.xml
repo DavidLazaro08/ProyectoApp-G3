@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/steam_bg"
+    android:gravity="center">
+
+    <!-- Header title -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/steam_header"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔒 RETRO GUARD"
+            android:textColor="@color/steam_blue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Autenticación en dos pasos"
+            android:textColor="@color/steam_text_secondary"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aprueba el acceso con tu código de seguridad."
+            android:textColor="@color/steam_text_secondary"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_marginBottom="28dp" />
+
+        <!-- Code viewfinder frame -->
+        <FrameLayout
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@color/steam_card"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp">
+
+            <!-- Corner decorations via Views -->
+            <View android:layout_width="24dp" android:layout_height="3dp" android:background="@color/steam_blue"
+                android:layout_gravity="top|start" />
+            <View android:layout_width="3dp" android:layout_height="24dp" android:background="@color/steam_blue"
+                android:layout_gravity="top|start" />
+            <View android:layout_width="24dp" android:layout_height="3dp" android:background="@color/steam_blue"
+                android:layout_gravity="top|end" />
+            <View android:layout_width="3dp" android:layout_height="24dp" android:background="@color/steam_blue"
+                android:layout_gravity="top|end" />
+            <View android:layout_width="24dp" android:layout_height="3dp" android:background="@color/steam_blue"
+                android:layout_gravity="bottom|start" />
+            <View android:layout_width="3dp" android:layout_height="24dp" android:background="@color/steam_blue"
+                android:layout_gravity="bottom|start" />
+            <View android:layout_width="24dp" android:layout_height="3dp" android:background="@color/steam_blue"
+                android:layout_gravity="bottom|end" />
+            <View android:layout_width="3dp" android:layout_height="24dp" android:background="@color/steam_blue"
+                android:layout_gravity="bottom|end" />
+
+            <!-- Code display in center -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CÓDIGO"
+                    android:textColor="@color/steam_text_secondary"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.15"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/txtGuardCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R4X-7K2"
+                    android:textColor="@color/steam_blue"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:fontFamily="monospace"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Se renueva cada 5 seg"
+                    android:textColor="@color/steam_text_secondary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/guardProgress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="200dp"
+            android:layout_height="6dp"
+            android:progressTint="@color/steam_blue"
+            android:progressBackgroundTint="@color/steam_divider"
+            android:max="100"
+            android:progress="100"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="32dp" />
+
+        <Button
+            android:id="@+id/btnApprove"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="APROBAR ACCESO"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:backgroundTint="@color/steam_button" />
+    </LinearLayout>
+
+</LinearLayout>

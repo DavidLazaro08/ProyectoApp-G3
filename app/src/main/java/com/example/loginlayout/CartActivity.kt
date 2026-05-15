@@ -84,9 +84,10 @@ class CartActivity : AppCompatActivity() {
 
         val btnCheckout = findViewById<Button>(R.id.btnCheckout)
         btnCheckout.setOnClickListener {
-            db.purchaseCart()
-            android.widget.Toast.makeText(this, "¡Compra realizada! Los juegos están en tu biblioteca.", android.widget.Toast.LENGTH_SHORT).show()
-            finish()
+            startActivity(Intent(this, CheckoutActivity::class.java).apply {
+                putExtra("isAdmin", isAdmin)
+                putExtra("username", username)
+            })
         }
 
         setupBottomNav()
@@ -104,6 +105,12 @@ class CartActivity : AppCompatActivity() {
         bottomNav.selectedItemId = R.id.nav_cart
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, HomeActivity::class.java).apply {
+                        putExtra("isAdmin", isAdmin); putExtra("username", username)
+                    })
+                    true
+                }
                 R.id.nav_store -> {
                     startActivity(Intent(this, EcommerceActivity::class.java).apply {
                         putExtra("isAdmin", isAdmin)
@@ -119,6 +126,12 @@ class CartActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_cart -> true
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, ProfileActivity::class.java).apply {
+                        putExtra("isAdmin", isAdmin); putExtra("username", username)
+                    })
+                    true
+                }
                 else -> false
             }
         }

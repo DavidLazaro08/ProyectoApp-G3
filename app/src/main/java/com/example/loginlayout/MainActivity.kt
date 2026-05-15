@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
             if (isValid) {
                 txtError.visibility = View.GONE
-                startActivity(Intent(this, EcommerceActivity::class.java).apply {
+                startActivity(Intent(this, SteamGuardActivity::class.java).apply {
                     putExtra("isAdmin", isAdmin)
                     putExtra("username", username)
                 })
@@ -45,6 +45,10 @@ class MainActivity : AppCompatActivity() {
                 txtError.text = "Usuario o contraseña incorrectos"
                 etPassword.text.clear()
             }
+        }
+        val txtGoRegister = findViewById<TextView?>(R.id.txtGoRegister)
+        txtGoRegister?.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 }
