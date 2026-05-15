@@ -1,4 +1,4 @@
-package com.example.loginlayout
+﻿package com.example.loginlayout
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.loginlayout.data.DBHelper
 
 class ProductDetailActivity : AppCompatActivity() {
 
@@ -19,8 +20,9 @@ class ProductDetailActivity : AppCompatActivity() {
         val txtDescripcion = findViewById<TextView>(R.id.txtDescripcion)
         val txtPrecio = findViewById<TextView>(R.id.txtPrecio)
         val btnComprar = findViewById<Button>(R.id.btnComprar)
-        val btnVolverDetalle = findViewById<Button>(R.id.btnVolverDetalle)
+        val btnVolver = findViewById<Button>(R.id.btnVolverDetalle)
 
+        val productId = intent.getIntExtra("productId", -1)
         val nombreJuego = intent.getStringExtra("nombreJuego") ?: "NEON STREETS REDUX"
         val categoriaJuego = intent.getStringExtra("categoriaJuego") ?: "Adventure · SNES"
         val descripcionJuego = intent.getStringExtra("descripcionJuego")
@@ -28,32 +30,39 @@ class ProductDetailActivity : AppCompatActivity() {
         val precioJuego = intent.getDoubleExtra("precioJuego", 19.99)
         val imagenPath = intent.getStringExtra("imagenPath")
         val imagenRes = intent.getIntExtra("imageRes", intent.getIntExtra("imagenJuego", R.drawable.neon_streets))
+        val isAdmin = intent.getBooleanExtra("isAdmin", false)
+        val username = intent.getStringExtra("username") ?: ""
 
-        // Muestra imagen desde uri o recurso según esté disponible
         if (!imagenPath.isNullOrEmpty()) {
-            imgProducto.setImageURI(android.net.Uri.parse(imagenPath))
+            try {
+                imgProducto.setImageURI(android.net.Uri.parse(imagenPath))
+            } catch (e: Exception) {
+                imgProducto.setImageResource(if (imagenRes != 0) imagenRes else R.drawable.neon_streets)
+            }
         } else {
-            imgProducto.setImageResource(imagenRes)
+            imgProducto.setImageResource(if (imagenRes != 0) imagenRes else R.drawable.neon_streets)
         }
+
         txtTitulo.text = nombreJuego
         txtCategoria.text = categoriaJuego
         txtDescripcion.text = descripcionJuego
-
-        if (precioJuego == 0.0) {
-            txtPrecio.text = "FREE"
-        } else {
-            txtPrecio.text = String.format("€%.2f", precioJuego)
-        }
+        txtPrecio.text = if (precioJuego == 0.0) "GRATIS" else String.format("€%.2f", precioJuego)
 
         btnComprar.setOnClickListener {
-            val intentCarrito = Intent(this, CartActivity::class.java)
-            intentCarrito.putExtra("nombreJuego", nombreJuego)
-            intentCarrito.putExtra("precioJuego", precioJuego)
-            startActivity(intentCarrito)
+            val db = DBHelper(this)
+            if (productId != -1) {
+                db.addToCart(productId)
+            } else {
+                // Fallback: busca por título si no tenemos id
+                val found = db.getAllProducts().find { it.title == nombreJuego }
+                if (found != null) db.addToCart(found.id)
+            }
+            startActivity(Intent(this, CartActivity::class.java).apply {
+                putExtra("isAdmin", isAdmin)
+                putExtra("username", username)
+            })
         }
 
-        btnVolverDetalle.setOnClickListener {
-            finish()
-        }
+        btnVolver.setOnClickListener { finish() }
     }
 }

@@ -1,5 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Paleta Retro Purple -->
+    <color name="steam_bg">#0B0014</color>
+    <color name="steam_bg_dark">#080010</color>
+    <color name="steam_surface">#1A0830</color>
+    <color name="steam_card">#1A0830</color>
+    <color name="steam_blue">#B84DFF</color>
+    <color name="steam_button">#A020F0</color>
+    <color name="steam_green">#C84BFF</color>
+    <color name="steam_text_primary">#F2E8FF</color>
+    <color name="steam_text_secondary">#B9A8C9</color>
+    <color name="steam_header">#0D0020</color>
+    <color name="steam_divider">#3D1060</color>
 </resources>

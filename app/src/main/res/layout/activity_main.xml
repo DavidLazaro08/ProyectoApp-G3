@@ -1,47 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="28dp"
-    android:background="#090012">
+    android:padding="32dp"
+    android:background="@color/steam_bg_dark">
 
     <ImageView
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_marginBottom="20dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="@string/logo_desc"
         android:src="@drawable/retrostore_logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Iniciar sesión"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
+        android:text="RETRO STORE"
+        android:textColor="@color/steam_blue"
+        android:textSize="30sp"
         android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        android:letterSpacing="0.1"
+        android:layout_marginBottom="6dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accede a tu cuenta para entrar en Retro Store"
-        android:textColor="#A8A8B3"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:layout_marginBottom="32dp" />
+        android:text="Tu tienda de juegos retro"
+        android:textColor="@color/steam_text_secondary"
+        android:textSize="14sp"
+        android:layout_marginBottom="36dp" />
 
     <EditText
         android:id="@+id/etLogin"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginBottom="16dp"
-        android:hint="@string/login"
+        android:layout_height="52dp"
+        android:layout_marginBottom="12dp"
+        android:hint="Nombre de usuario"
         android:inputType="text"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#8F8F9A"
-        android:backgroundTint="#7E22CE"
+        android:textColor="@color/steam_text_primary"
+        android:textColorHint="@color/steam_text_secondary"
+        android:background="@drawable/input_bg"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:autofillHints="username" />
@@ -49,24 +49,43 @@
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginBottom="28dp"
-        android:hint="@string/password"
+        android:layout_height="52dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Contrasena"
         android:inputType="textPassword"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#8F8F9A"
-        android:backgroundTint="#7E22CE"
+        android:textColor="@color/steam_text_primary"
+        android:textColorHint="@color/steam_text_secondary"
+        android:background="@drawable/input_bg"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:autofillHints="password" />
 
+    <TextView
+        android:id="@+id/txtLoginError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FF5252"
+        android:textSize="13sp"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="@string/inicio_sesion"
+        android:layout_height="52dp"
+        android:text="INICIAR SESION"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:backgroundTint="#A020F0" />
+        android:backgroundTint="@color/steam_button" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cuentas: admin/admin123  -  user/1234"
+        android:textColor="@color/steam_text_secondary"
+        android:textSize="11sp"
+        android:layout_marginTop="24dp"
+        android:alpha="0.6" />
 
 </LinearLayout>

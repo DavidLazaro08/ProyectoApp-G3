@@ -12,23 +12,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Loginlayout">
         <activity
-            android:name=".activity_catalog"
-            android:exported="false" />
-        <activity
             android:name=".ProductDetailActivity"
             android:exported="false" />
         <activity
             android:name=".CartActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".CatalogActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".AdminUploadActivity"
             android:exported="false" />
         <activity
             android:name=".EcommerceActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

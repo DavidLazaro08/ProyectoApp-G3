@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.loginlayout.data.DBHelper
@@ -16,6 +17,7 @@ class AdminUploadActivity : AppCompatActivity() {
 
     private val PICK_IMAGE = 1001
     private var selectedImageUri: Uri? = null
+    private lateinit var imgPreview: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,7 @@ class AdminUploadActivity : AppCompatActivity() {
         val etCategory = findViewById<EditText>(R.id.etCategory)
         val etPrice = findViewById<EditText>(R.id.etPrice)
         val etDescription = findViewById<EditText>(R.id.etDescription)
+        imgPreview = findViewById(R.id.imgPreview)
 
         val btnPick = findViewById<Button>(R.id.btnPickImage)
         val btnSave = findViewById<Button>(R.id.btnSaveProduct)
@@ -74,6 +77,9 @@ class AdminUploadActivity : AppCompatActivity() {
             val uri = data?.data
             if (uri != null) {
                 selectedImageUri = uri
+                try {
+                    imgPreview.setImageURI(uri)
+                } catch (e: Exception) { /* keep placeholder */ }
                 // Intenta tomar permiso persistente para mantener acceso
                 try {
                     contentResolver.takePersistableUriPermission(

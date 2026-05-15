@@ -1,16 +1,25 @@
-package com.example.loginlayout
+﻿package com.example.loginlayout
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.loginlayout.data.DBHelper
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class CartActivity : AppCompatActivity() {
+
+    private var isAdmin = false
+    private var username = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
+
+        isAdmin = intent.getBooleanExtra("isAdmin", false)
+        username = intent.getStringExtra("username") ?: ""
 
         val txtCartItems = findViewById<TextView>(R.id.txtCartItems)
         val txtCartPrice = findViewById<TextView>(R.id.txtCartPrice)
@@ -22,10 +31,9 @@ class CartActivity : AppCompatActivity() {
         val btnBackCatalog = findViewById<Button>(R.id.btnBackCatalog)
         val imgCartProduct = findViewById<ImageView>(R.id.imgCartProduct)
 
-        val db = com.example.loginlayout.data.DBHelper(this)
+        val db = DBHelper(this)
         val cart = db.getCartItems()
 
-        // Muestra resumen simple del carrito persistente
         if (cart.isEmpty()) {
             txtCartItems.text = "Carrito vacío"
             txtCartPrice.text = "€0.00"
@@ -37,15 +45,20 @@ class CartActivity : AppCompatActivity() {
         } else {
             var subtotal = 0.0
             var itemsCount = 0
-            // Mostrar primer producto como ejemplo
+
             val first = cart[0]
             val product = db.getProductById(first.first)
             if (product != null) {
                 txtCartItems.text = product.title
-                txtCartPrice.text = String.format("€%.2f", product.price)
-                txtCartQuantity.text = "Cantidad: ${first.second}"
+                txtCartPrice.text = if (product.price == 0.0) "GRATIS"
+                    else String.format("€%.2f", product.price)
+                txtCartQuantity.text = "Cantidad: "
                 if (!product.imagePath.isNullOrEmpty()) {
-                    imgCartProduct.setImageURI(android.net.Uri.parse(product.imagePath))
+                    try {
+                        imgCartProduct.setImageURI(android.net.Uri.parse(product.imagePath))
+                    } catch (e: Exception) {
+                        if (product.imageRes != 0) imgCartProduct.setImageResource(product.imageRes)
+                    }
                 } else if (product.imageRes != 0) {
                     imgCartProduct.setImageResource(product.imageRes)
                 }
@@ -61,23 +74,53 @@ class CartActivity : AppCompatActivity() {
 
             val tax = subtotal * 0.21
             val total = subtotal + tax
-
             txtSummaryItems.text = "Items: $itemsCount"
             txtSummarySubtotal.text = String.format("Subtotal: €%.2f", subtotal)
-            txtSummaryTax.text = String.format("Tax: €%.2f", tax)
+            txtSummaryTax.text = String.format("Tax (21%%): €%.2f", tax)
             txtTotal.text = String.format("TOTAL: €%.2f", total)
         }
 
-        btnBackCatalog.setOnClickListener {
-            finish()
-        }
-        // Simula el checkout: vacía el carrito y muestra confirmación
+        btnBackCatalog.setOnClickListener { finish() }
+
         val btnCheckout = findViewById<Button>(R.id.btnCheckout)
         btnCheckout.setOnClickListener {
-            db.clearCart()
-            android.widget.Toast.makeText(this, "Compra simulada. Carrito vaciado.", android.widget.Toast.LENGTH_SHORT).show()
-            // Volvemos a la pantalla principal
+            db.purchaseCart()
+            android.widget.Toast.makeText(this, "¡Compra realizada! Los juegos están en tu biblioteca.", android.widget.Toast.LENGTH_SHORT).show()
             finish()
+        }
+
+        setupBottomNav()
+    }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        isAdmin = intent.getBooleanExtra("isAdmin", false)
+        username = intent.getStringExtra("username") ?: username
+    }
+
+    private fun setupBottomNav() {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomNav.selectedItemId = R.id.nav_cart
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_store -> {
+                    startActivity(Intent(this, EcommerceActivity::class.java).apply {
+                        putExtra("isAdmin", isAdmin)
+                        putExtra("username", username)
+                    })
+                    true
+                }
+                R.id.nav_library -> {
+                    startActivity(Intent(this, CatalogActivity::class.java).apply {
+                        putExtra("isAdmin", isAdmin)
+                        putExtra("username", username)
+                    })
+                    true
+                }
+                R.id.nav_cart -> true
+                else -> false
+            }
         }
     }
 }

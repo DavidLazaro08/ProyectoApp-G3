@@ -1,69 +1,102 @@
-package com.example.loginlayout
+﻿package com.example.loginlayout
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loginlayout.data.DBHelper
-import com.example.loginlayout.data.Product
-import com.example.loginlayout.ui.ProductAdapter
+import com.example.loginlayout.ui.GameGridAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class CatalogActivity : AppCompatActivity() {
 
-    // Activity que muestra productos desde la base local
     private lateinit var db: DBHelper
-    private lateinit var adapter: ProductAdapter
+    private lateinit var gridAdapter: GameGridAdapter
+    private var isAdmin = false
+    private var username = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_catalog)
 
+        isAdmin = intent.getBooleanExtra("isAdmin", false)
+        username = intent.getStringExtra("username") ?: ""
+
         db = DBHelper(this)
 
-        // Se insertan demos si la tabla está vacía
-        if (db.getAllProducts().isEmpty()) {
-            seedSampleProducts()
-        }
+        findViewById<TextView>(R.id.txtLibraryUser).text = username
 
         val recycler = findViewById<RecyclerView>(R.id.recyclerProducts)
-        recycler.layoutManager = LinearLayoutManager(this)
+        val txtEmpty = findViewById<TextView>(R.id.txtLibraryEmpty)
+        recycler.layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.grid_columns))
 
-        adapter = ProductAdapter(this, db.getAllProducts(), onAddToCart = { p ->
-            db.addToCart(p.id)
-            startActivity(Intent(this, CartActivity::class.java))
-        }, onOpenDetail = { p ->
-            val intent = Intent(this, ProductDetailActivity::class.java)
-            intent.putExtra("nombreJuego", p.title)
-            intent.putExtra("categoriaJuego", p.category)
-            intent.putExtra("descripcionJuego", p.description)
-            intent.putExtra("precioJuego", p.price)
-            intent.putExtra("imagenPath", p.imagePath)
-            intent.putExtra("imageRes", p.imageRes)
-            startActivity(intent)
-        })
+        val purchased = db.getPurchasedProducts()
+        txtEmpty?.visibility = if (purchased.isEmpty()) View.VISIBLE else View.GONE
+        recycler.visibility = if (purchased.isEmpty()) View.GONE else View.VISIBLE
 
-        recycler.adapter = adapter
+        gridAdapter = GameGridAdapter(this, purchased) { p ->
+            startActivity(Intent(this, ProductDetailActivity::class.java).apply {
+                putExtra("productId", p.id)
+                putExtra("nombreJuego", p.title)
+                putExtra("categoriaJuego", p.category)
+                putExtra("descripcionJuego", p.description)
+                putExtra("precioJuego", p.price)
+                putExtra("imagenPath", p.imagePath)
+                putExtra("imageRes", p.imageRes)
+                putExtra("isAdmin", isAdmin)
+                putExtra("username", username)
+            })
+        }
+        recycler.adapter = gridAdapter
 
-        findViewById<android.widget.Button>(R.id.btnGoCart).setOnClickListener {
-            startActivity(Intent(this, CartActivity::class.java))
+        setupBottomNav()
+    }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        isAdmin = intent.getBooleanExtra("isAdmin", false)
+        username = intent.getStringExtra("username") ?: username
+        findViewById<TextView>(R.id.txtLibraryUser).text = username
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (::gridAdapter.isInitialized) {
+            val purchased = db.getPurchasedProducts()
+            gridAdapter.update(purchased)
+            val txtEmpty = findViewById<TextView>(R.id.txtLibraryEmpty)
+            val recycler = findViewById<RecyclerView>(R.id.recyclerProducts)
+            txtEmpty?.visibility = if (purchased.isEmpty()) View.VISIBLE else View.GONE
+            recycler?.visibility = if (purchased.isEmpty()) View.GONE else View.VISIBLE
         }
     }
 
-    // Inserta 3 juegos de ejemplo
-    private fun seedSampleProducts() {
-        val p1 = Product(title = "NEON STREETS REDUX", category = "Adventure · SNES", description = "The definitive 16-bit synthwave odyssey with retro arcade vibes.", price = 19.99, imageRes = R.drawable.neon_streets, seller = "retrodev")
-        val p2 = Product(title = "SHADOW BLADE DX", category = "Adventure · FREE", description = "A fast retro action game with dark pixel art and classic arcade combat.", price = 0.0, imageRes = R.drawable.shadow_blade, seller = "retrodev")
-        val p3 = Product(title = "RETRO STORM", category = "Fighting · Arcade", description = "A fighting game inspired by classic arcade machines and neon battles.", price = 29.99, imageRes = R.drawable.retro_storm, seller = "retrodev")
-        db.insertProduct(p1)
-        db.insertProduct(p2)
-        db.insertProduct(p3)
-    }
-
-    // Refresca la lista al volver a primer plano
-    override fun onResume() {
-        super.onResume()
-        val items = db.getAllProducts()
-        adapter.update(items)
+    private fun setupBottomNav() {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomNav.selectedItemId = R.id.nav_library
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_store -> {
+                    startActivity(Intent(this, EcommerceActivity::class.java).apply {
+                        putExtra("isAdmin", isAdmin)
+                        putExtra("username", username)
+                    })
+                    true
+                }
+                R.id.nav_library -> true
+                R.id.nav_cart -> {
+                    startActivity(Intent(this, CartActivity::class.java).apply {
+                        putExtra("isAdmin", isAdmin)
+                        putExtra("username", username)
+                    })
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }
